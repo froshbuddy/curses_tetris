@@ -21,48 +21,51 @@ struct elt_t{
 	{
 		screen =scr;
 		rep=r;
+		int h=screen->height-1;
 		X=x;
 		Y=y;
-		screen->elts[x][y]=rep;
+		screen->elts[y][x]=rep;
 	}
 	void move(int x, int y)
 	{
-		if(screen->elts[x][y]=='%') return;
-		screen->elts[X][Y]=' ';
+		int h=screen->height-1;
+		if(screen->elts[y][x]=='%') return;
+		screen->elts[Y][X]=' ';
 		X=x;
 		Y=y;
-		screen->elts[x][y]=rep;
+
+		screen->elts[Y][X]=rep;
 	}
 };
 
 screen_t::screen_t(int w, int h)
 {
-	width=w;
-	height=h;
+	width=w+2;
+	height=h+2;
 	for(int i=0; i<width; i++)
 	{
 		for(int j=0; j<height; j++)
 		{
-			elts[i][j]=' ';
+			elts[j][i]=' ';
 		}
 	}
 	for(int i=0; i<width; i++)
 	{
-		elts[i][0]='%';
-		elts[i][height-1]='%';
+		elts[0][i]='X';
+		elts[height-1][i]='X';
 	}
 	for(int i=0; i<height; i++)
 	{
-		elts[0][i]='%';
-		elts[width-1][i]='%';
+		elts[i][0]='X';
+		elts[i][width-1]='X';
 	}
 }
 
 void screen_t::draw()
 {
-	for(int i=0; i<width; i++)
+	for(int i=height-1; i>=0; i--)
 	{
-		for(int j=0; j<height; j++)
+		for(int j=0; j<width; j++)
 		{
 			addch(elts[i][j]);
 		}
